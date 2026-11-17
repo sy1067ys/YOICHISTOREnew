@@ -1,7 +1,26 @@
 import { ImageWithFallback } from '../components/figma/ImageWithFallback';
-import { Heart, MessageCircle, Share2, User, Instagram, Music } from 'lucide-react';
+import { Heart, MessageCircle, Instagram, Music, ArrowUpRight } from 'lucide-react';
 
-const mockPosts = [
+const serif = { fontFamily: '"Hiragino Mincho ProN", "Yu Mincho", "Noto Serif JP", serif' };
+
+const channels = [
+  {
+    name: 'Instagram',
+    handle: '@yoichistore',
+    href: 'https://www.instagram.com',
+    body: '新商品の写真や、ユーザーの投稿をチェックできます。',
+    Icon: Instagram,
+  },
+  {
+    name: 'TikTok',
+    handle: '@yoichistore',
+    href: 'https://www.tiktok.com',
+    body: '商品紹介やハウツー動画を配信しています。',
+    Icon: Music,
+  },
+];
+
+const posts = [
   {
     id: 1,
     author: '山田太郎',
@@ -36,150 +55,85 @@ const mockPosts = [
 
 export default function SNS() {
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Hero Section */}
-      <section className="bg-gradient-to-r from-purple-200 via-pink-100 to-blue-200 py-16">
-        <div className="container mx-auto px-6">
-          <h1 className="text-5xl font-bold mb-4 bg-gradient-to-r from-pink-500 to-blue-500 bg-clip-text text-transparent">
+    <>
+      {/* Title */}
+      <section className="bg-white">
+        <div className="mx-auto max-w-6xl px-6 pt-16 pb-12 md:pt-24 md:pb-16">
+          <h1 className="text-[2.25rem] leading-[1.3] md:text-5xl font-medium tracking-tight" style={serif}>
             SNSコミュニティ
           </h1>
-          <p className="text-xl text-gray-700">
-            ユーザー同士がつながり、面白い発見をシェアする場所
+          <p className="mt-6 max-w-md text-base leading-8 text-[#4b5365]">
+            ユーザー同士がつながり、面白い発見をシェアする場所です。
           </p>
         </div>
       </section>
 
-      {/* Social Media Links */}
-      <div className="container mx-auto px-6 py-8">
-        <div className="max-w-6xl mx-auto">
-          <div className="grid md:grid-cols-2 gap-6">
-            {/* Instagram */}
-            <a
-              href="https://www.instagram.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="bg-gradient-to-br from-purple-500 via-pink-500 to-orange-400 rounded-2xl p-8 text-white hover:shadow-2xl transition group"
-            >
-              <div className="flex items-center gap-4 mb-4">
-                <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center group-hover:scale-110 transition">
-                  <Instagram size={32} />
-                </div>
-                <div>
-                  <h3 className="text-2xl font-bold">Instagram</h3>
-                  <p className="text-white/80">@yoichistore</p>
-                </div>
-              </div>
-              <p className="text-white/90 leading-relaxed">
-                最新の商品写真やユーザーの投稿をチェック。毎日更新される面白いコンテンツをお楽しみください。
-              </p>
-            </a>
-
-            {/* TikTok */}
-            <a
-              href="https://www.tiktok.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="bg-gradient-to-br from-black via-gray-800 to-teal-500 rounded-2xl p-8 text-white hover:shadow-2xl transition group"
-            >
-              <div className="flex items-center gap-4 mb-4">
-                <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center group-hover:scale-110 transition">
-                  <Music size={32} />
-                </div>
-                <div>
-                  <h3 className="text-2xl font-bold">TikTok</h3>
-                  <p className="text-white/80">@yoichistore</p>
-                </div>
-              </div>
-              <p className="text-white/90 leading-relaxed">
-                商品紹介やハウツー動画、ユーザー投稿など、エンターテイメント性の高いコンテンツを配信中。
-              </p>
-            </a>
-          </div>
+      {/* Channels */}
+      <section className="bg-white pb-16 md:pb-24">
+        <div className="mx-auto max-w-6xl px-6">
+          <ul className="grid gap-4 md:grid-cols-2">
+            {channels.map(({ name, handle, href, body, Icon }) => (
+              <li key={name}>
+                <a
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group flex items-center gap-5 border border-[#e0e3ea] p-6 transition-colors hover:border-[#1c2230] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#4a86e8]"
+                >
+                  <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[#f6f7f9] text-[#1c2230]">
+                    <Icon size={22} />
+                  </span>
+                  <span className="flex-1">
+                    <span className="block font-medium">
+                      {name} <span className="ml-1 text-sm font-normal text-[#7b8294]">{handle}</span>
+                    </span>
+                    <span className="mt-1 block text-sm leading-7 text-[#5d6577]">{body}</span>
+                  </span>
+                  <ArrowUpRight size={20} className="shrink-0 text-[#7b8294] group-hover:text-[#1c2230] transition-colors" />
+                </a>
+              </li>
+            ))}
+          </ul>
         </div>
-      </div>
+      </section>
 
-      {/* Main Content */}
-      <div className="container mx-auto px-6 py-12">
-        <div className="max-w-3xl mx-auto">
-          {/* Post Creation */}
-          <div className="bg-white rounded-2xl shadow-md p-6 mb-8">
-            <div className="flex gap-4">
-              <div className="w-12 h-12 bg-gradient-to-r from-pink-500 to-blue-400 rounded-full flex items-center justify-center">
-                <User className="text-white" size={24} />
-              </div>
-              <div className="flex-1">
-                <input
-                  type="text"
-                  placeholder="面白い発見をシェアしましょう..."
-                  className="w-full px-4 py-3 bg-gray-100 rounded-full focus:outline-none focus:ring-2 focus:ring-pink-500"
-                />
-              </div>
-            </div>
-            <div className="flex justify-end mt-4">
-              <button className="bg-gradient-to-r from-pink-500 to-blue-400 text-white px-6 py-2 rounded-full hover:shadow-lg transition">
-                投稿する
-              </button>
-            </div>
-          </div>
-
-          {/* Posts Feed */}
-          <div className="space-y-6">
-            {mockPosts.map((post) => (
-              <div key={post.id} className="bg-white rounded-2xl shadow-md overflow-hidden hover:shadow-lg transition">
-                {/* Post Header */}
-                <div className="p-6 pb-4">
-                  <div className="flex items-center gap-3 mb-4">
+      {/* Posts */}
+      <section className="bg-[#f6f7f9] py-20 md:py-24">
+        <div className="mx-auto max-w-6xl px-6">
+          <h2 className="text-2xl md:text-3xl font-medium" style={serif}>
+            みんなの投稿
+          </h2>
+          <ul className="mt-10 grid gap-6 md:grid-cols-3">
+            {posts.map((post) => (
+              <li key={post.id} className="flex flex-col bg-white">
+                <ImageWithFallback src={post.image} alt="投稿された写真" className="w-full aspect-[4/3] object-cover" />
+                <div className="flex flex-1 flex-col p-6">
+                  <p className="text-[15px] leading-8 text-[#2f3748]">{post.content}</p>
+                  <div className="mt-6 flex items-center gap-3 pt-4 border-t border-[#eef0f4]">
                     <ImageWithFallback
                       src={post.avatar}
                       alt={post.author}
-                      className="w-12 h-12 rounded-full object-cover"
+                      className="h-9 w-9 rounded-full object-cover"
                     />
-                    <div>
-                      <p className="font-bold text-gray-800">{post.author}</p>
-                      <p className="text-sm text-gray-500">{post.time}</p>
+                    <div className="flex-1">
+                      <p className="text-sm font-medium">{post.author}</p>
+                      <p className="text-xs text-[#7b8294]">{post.time}</p>
                     </div>
-                  </div>
-                  <p className="text-gray-700 leading-relaxed">{post.content}</p>
-                </div>
-
-                {/* Post Image */}
-                {post.image && (
-                  <ImageWithFallback
-                    src={post.image}
-                    alt="投稿画像"
-                    className="w-full h-96 object-cover"
-                  />
-                )}
-
-                {/* Post Actions */}
-                <div className="p-6 pt-4">
-                  <div className="flex items-center justify-between border-t border-gray-100 pt-4">
-                    <button className="flex items-center gap-2 text-gray-600 hover:text-pink-500 transition">
-                      <Heart size={20} />
-                      <span>{post.likes}</span>
-                    </button>
-                    <button className="flex items-center gap-2 text-gray-600 hover:text-blue-500 transition">
-                      <MessageCircle size={20} />
-                      <span>{post.comments}</span>
-                    </button>
-                    <button className="flex items-center gap-2 text-gray-600 hover:text-purple-500 transition">
-                      <Share2 size={20} />
-                      <span>シェア</span>
-                    </button>
+                    <span className="flex items-center gap-1 text-xs text-[#5d6577]">
+                      <Heart size={14} aria-hidden="true" />
+                      {post.likes}
+                    </span>
+                    <span className="flex items-center gap-1 text-xs text-[#5d6577]">
+                      <MessageCircle size={14} aria-hidden="true" />
+                      {post.comments}
+                    </span>
                   </div>
                 </div>
-              </div>
+              </li>
             ))}
-          </div>
-
-          {/* Load More */}
-          <div className="text-center mt-8">
-            <button className="bg-white text-gray-700 px-8 py-3 rounded-full border-2 border-gray-200 hover:border-pink-500 hover:text-pink-500 transition">
-              もっと見る
-            </button>
-          </div>
+          </ul>
         </div>
-      </div>
-    </div>
+      </section>
+    </>
   );
 }
