@@ -1,162 +1,253 @@
+import { useState } from 'react';
+import { Link } from 'react-router';
 import { ImageWithFallback } from '../components/figma/ImageWithFallback';
-import { ArrowRight, Lightbulb, Palette, ShoppingBag, Star, Users } from 'lucide-react';
+
+const serif = { fontFamily: '"Hiragino Mincho ProN", "Yu Mincho", "Noto Serif JP", serif' };
+
+const unsplash = (id: string) =>
+  `https://images.unsplash.com/${id}?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080`;
+
+const categories = ['すべて', 'バッグ・財布', 'アクセサリー', '雑貨', '文具'] as const;
+type Category = (typeof categories)[number];
+
+const products: { name: string; price: string; category: Exclude<Category, 'すべて'>; tag?: string; image: string }[] = [
+  { name: '手縫いレザートート', price: '¥98,000〜', category: 'バッグ・財布', tag: '人気', image: unsplash('photo-1584917865442-de89df76afd3') },
+  { name: 'ゴールドチェーンネックレス', price: '¥64,000〜', category: 'アクセサリー', image: unsplash('photo-1599643478518-a784e5dc4c8f') },
+  { name: 'スエード内装の長財布', price: '¥52,000〜', category: 'バッグ・財布', image: unsplash('photo-1627123424574-724758594e93') },
+  { name: 'シルクグラデーションスカーフ', price: '¥38,000〜', category: 'アクセサリー', image: unsplash('photo-1601924994987-69e26d50dc26') },
+  { name: 'うさ耳ヘアクリップ', price: '¥1,800', category: 'アクセサリー', tag: 'NEW', image: unsplash('photo-1620656798579-1984d9e87df7') },
+  { name: 'パールリボンチャーム', price: '¥2,400', category: 'アクセサリー', tag: '人気', image: unsplash('photo-1611085583191-a3b181a88401') },
+  { name: 'もこもこぬいぐるみポーチ', price: '¥3,200', category: 'バッグ・財布', image: unsplash('photo-1584589167171-541ce45f1eea') },
+  { name: '遊び心ステーショナリー', price: '¥1,600〜', category: '文具', tag: 'NEW', image: unsplash('photo-1519389950473-47ba0277781c') },
+  { name: 'デザイナーズトート', price: '¥4,200', category: 'バッグ・財布', tag: '限定', image: unsplash('photo-1544816155-12df9643f363') },
+  { name: 'インテリア雑貨コラボ', price: '¥2,800〜', category: '雑貨', image: unsplash('photo-1493663284031-b7e3aefcae8e') },
+  { name: 'リミテッドグッズ', price: '¥3,400', category: '雑貨', tag: '限定', image: unsplash('photo-1607083206968-13611e3d76db') },
+  { name: 'リボンレターセット', price: '¥1,200', category: '文具', image: unsplash('photo-1519791883288-dc8bd696e667') },
+];
+
+const services = [
+  {
+    title: 'アイデア',
+    body: '常識にとらわれない発想で、お客様のビジネスに新しい価値を届けます。',
+  },
+  {
+    title: 'デザイン',
+    body: '美しさと使いやすさを両立し、見た人の心に残る体験をつくります。',
+  },
+  {
+    title: 'ショッピング',
+    body: '楽しく、便利で、ちょっと驚く。そんな買い物の時間を提供します。',
+  },
+];
+
+const features = [
+  {
+    title: '厳選されたアイテム',
+    body: 'デザイナーとバイヤーが選んだ商品だけを掲載しています。',
+  },
+  {
+    title: 'あなたに合う提案',
+    body: '好みに合わせて、AIが商品をおすすめします。',
+  },
+  {
+    title: 'つながるコミュニティ',
+    body: 'ユーザー同士がインスピレーションを共有できます。',
+  },
+];
 
 export default function Home() {
+  const [category, setCategory] = useState<Category>('すべて');
+  const visible = category === 'すべて' ? products : products.filter((p) => p.category === category);
+
   return (
     <>
-      {/* Hero Section */}
-      <section className="relative bg-gradient-to-r from-purple-200 via-pink-100 to-blue-200 py-20">
-        <div className="container mx-auto px-6">
-          <div className="max-w-3xl">
-            <h1 className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-pink-500 to-blue-500 bg-clip-text text-transparent">
-              アイデア×デザイン×ショッピング
+      {/* Hero */}
+      <section className="bg-white">
+        <div className="mx-auto max-w-6xl px-6 pt-16 pb-20 md:pt-24 md:pb-28 grid gap-12 md:grid-cols-12 md:items-center">
+          <div className="md:col-span-7">
+            <h1
+              className="text-[2.5rem] leading-[1.25] md:text-[4rem] tracking-tight font-medium"
+              style={serif}
+            >
+              面白いを、
+              <br />
+              見つけよう。
             </h1>
-            <p className="text-3xl md:text-4xl font-bold text-gray-800 mb-8">
-              面白いを見つけよう!!
+            <p className="mt-8 max-w-lg text-base leading-8 text-[#4b5365] [text-wrap:balance]">
+              アイデア × デザイン × ショッピング。
+              <br />
+              毎日の暮らしに、ちょっとした驚きを添える商品を集めました。
             </p>
-            <p className="text-xl text-gray-700 mb-8 leading-relaxed">
-              YOICHI STOREは、革新的なアイデアと洗練されたデザイン、そして新しいショッピング体験を融合させた、まったく新しいプラットフォームです。
-            </p>
-            <button className="bg-gradient-to-r from-pink-500 to-blue-400 text-white px-8 py-4 rounded-full text-lg font-semibold hover:shadow-xl transition flex items-center gap-2 group">
-              今すぐ始める
-              <ArrowRight className="group-hover:translate-x-1 transition" />
-            </button>
-          </div>
-        </div>
-      </section>
-
-      {/* Services Section */}
-      <section id="services" className="py-20 bg-white">
-        <div className="container mx-auto px-6">
-          <h2 className="text-4xl font-bold text-center mb-4">YOICHI STOREのサービス</h2>
-          <p className="text-center text-gray-600 mb-16 text-lg">3つの要素で新しい価値を創造します</p>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="p-8 rounded-2xl bg-gradient-to-br from-pink-50 to-pink-100 hover:shadow-xl transition">
-              <div className="w-16 h-16 bg-gradient-to-r from-pink-500 to-pink-400 rounded-full flex items-center justify-center mb-6">
-                <Lightbulb className="text-white" size={32} />
-              </div>
-              <h3 className="text-2xl font-bold mb-4 text-gray-800">アイデア</h3>
-              <p className="text-gray-700 leading-relaxed">
-                常識にとらわれない斬新なアイデアで、お客様のビジネスに新しい価値を提供します。イノベーションを起こすための発想力が私たちの強みです。
-              </p>
-            </div>
-
-            <div className="p-8 rounded-2xl bg-gradient-to-br from-purple-50 to-purple-100 hover:shadow-xl transition">
-              <div className="w-16 h-16 bg-gradient-to-r from-purple-500 to-purple-400 rounded-full flex items-center justify-center mb-6">
-                <Palette className="text-white" size={32} />
-              </div>
-              <h3 className="text-2xl font-bold mb-4 text-gray-800">デザイン</h3>
-              <p className="text-gray-700 leading-relaxed">
-                美しさと機能性を兼ね備えたデザインで、ユーザー体験を最大化します。視覚的な魅力と使いやすさの両立を追求しています。
-              </p>
-            </div>
-
-            <div className="p-8 rounded-2xl bg-gradient-to-br from-blue-50 to-blue-100 hover:shadow-xl transition">
-              <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-blue-400 rounded-full flex items-center justify-center mb-6">
-                <ShoppingBag className="text-white" size={32} />
-              </div>
-              <h3 className="text-2xl font-bold mb-4 text-gray-800">ショッピング</h3>
-              <p className="text-gray-700 leading-relaxed">
-                次世代のショッピング体験を提供します。楽しく、便利で、驚きに満ちた購買プロセスで、お客様の満足度を高めます。
-              </p>
+            <div className="mt-10 flex flex-wrap gap-4">
+              <Link
+                to="/#products"
+                className="rounded-full bg-[#1c2230] px-8 py-3.5 text-white hover:bg-[#2f3748] transition-colors"
+              >
+                商品を見る
+              </Link>
+              <Link
+                to="/#contact"
+                className="rounded-full border border-[#c9cdd8] px-8 py-3.5 text-[#1c2230] hover:border-[#1c2230] transition-colors"
+              >
+                お問い合わせ
+              </Link>
             </div>
           </div>
-        </div>
-      </section>
 
-      {/* Features Section */}
-      <section id="features" className="py-20 bg-gray-50">
-        <div className="container mx-auto px-6">
-          <h2 className="text-4xl font-bold text-center mb-16">YOICHI STOREの特徴</h2>
-
-          <div className="grid md:grid-cols-2 gap-12 items-center mb-16">
-            <div>
+          <div className="md:col-span-5 grid grid-cols-5 gap-4 items-end">
+            <ImageWithFallback
+              src={products[0].image}
+              alt={products[0].name}
+              className="col-span-3 w-full aspect-[3/4] object-cover"
+            />
+            <div className="col-span-2 grid gap-4">
               <ImageWithFallback
-                src="https://images.unsplash.com/photo-1664455340023-214c33a9d0bd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzaG9wcGluZyUyMGNyZWF0aXZlJTIwZGVzaWdufGVufDF8fHx8MTc4MTAwNDcxNHww&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral"
-                alt="クリエイティブなショッピング体験"
-                className="w-full h-96 object-cover rounded-2xl shadow-lg"
+                src={products[5].image}
+                alt={products[5].name}
+                className="w-full aspect-square object-cover"
               />
-            </div>
-            <div>
-              <h3 className="text-3xl font-bold mb-4">面白い発見がある</h3>
-              <p className="text-gray-700 mb-6 leading-relaxed text-lg">
-                私たちは単なるショッピングプラットフォームではありません。毎日新しい「面白い」を発見できる場所です。ユニークな商品、斬新なアイデア、クリエイティブなデザインとの出会いを提供します。
-              </p>
-              <div className="flex items-start gap-3 mb-4">
-                <Star className="text-pink-500 mt-1" size={24} />
-                <div>
-                  <h4 className="font-bold mb-1">厳選されたアイテム</h4>
-                  <p className="text-gray-600">デザイナーとバイヤーが厳選した商品のみを掲載</p>
-                </div>
-              </div>
-              <div className="flex items-start gap-3">
-                <Star className="text-blue-500 mt-1" size={24} />
-                <div>
-                  <h4 className="font-bold mb-1">パーソナライズド体験</h4>
-                  <p className="text-gray-600">あなたの好みに合わせた商品をAIがレコメンド</p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div className="order-2 md:order-1">
-              <h3 className="text-3xl font-bold mb-4">革新的なアプローチ</h3>
-              <p className="text-gray-700 mb-6 leading-relaxed text-lg">
-                テクノロジーとクリエイティビティを組み合わせ、これまでにないショッピング体験を創造します。AR試着、AIコンシェルジュ、インタラクティブな商品紹介など、最新技術を活用しています。
-              </p>
-              <div className="flex items-start gap-3 mb-4">
-                <Users className="text-purple-500 mt-1" size={24} />
-                <div>
-                  <h4 className="font-bold mb-1">コミュニティ主導</h4>
-                  <p className="text-gray-600">ユーザー同士が繋がり、インスピレーションを共有</p>
-                </div>
-              </div>
-            </div>
-            <div className="order-1 md:order-2">
               <ImageWithFallback
-                src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxpbm5vdmF0aXZlJTIwdGVjaG5vbG9neSUyMHdvcmtzcGFjZXxlbnwxfHx8fDE3ODA5ODcwNTZ8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral"
-                alt="革新的なワークスペース"
-                className="w-full h-96 object-cover rounded-2xl shadow-lg"
+                src={products[7].image}
+                alt={products[7].name}
+                className="w-full aspect-square object-cover"
               />
             </div>
           </div>
         </div>
       </section>
 
-      {/* About Section */}
-      <section id="about" className="py-20 bg-white">
-        <div className="container mx-auto px-6">
-          <div className="max-w-4xl mx-auto">
-            <h2 className="text-4xl font-bold text-center mb-8">会社概要</h2>
-            <div className="bg-gradient-to-r from-purple-100 to-blue-100 p-10 rounded-2xl">
-              <ImageWithFallback
-                src="https://images.unsplash.com/photo-1690378820474-b468b8ee64d3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtb2Rlcm4lMjBidXNpbmVzcyUyMG9mZmljZSUyMHRlYW18ZW58MXx8fHwxNzgwODIzNDM5fDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral"
-                alt="チーム"
-                className="w-full h-64 object-cover rounded-xl mb-8"
-              />
-              <p className="text-lg text-gray-700 leading-relaxed mb-6">
-                YOICHI STOREは、「面白い」を追求し続ける企業です。私たちは、アイデア、デザイン、ショッピングという3つの要素を掛け合わせることで、まったく新しい価値を生み出しています。
-              </p>
-              <p className="text-lg text-gray-700 leading-relaxed">
-                お客様一人ひとりに寄り添い、日常に驚きと喜びをもたらすことが私たちのミッションです。テクノロジーとクリエイティビティの力で、未来のショッピング体験を創造していきます。
-              </p>
+      {/* Products */}
+      <section id="products" className="scroll-mt-20 bg-[#f6f7f9] py-20 md:py-28">
+        <div className="mx-auto max-w-6xl px-6">
+          <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+            <h2 className="text-3xl md:text-4xl font-medium" style={serif}>
+              ピックアップ商品
+            </h2>
+            <div className="flex flex-wrap gap-2" role="group" aria-label="カテゴリで絞り込む">
+              {categories.map((c) => (
+                <button
+                  key={c}
+                  type="button"
+                  onClick={() => setCategory(c)}
+                  aria-pressed={category === c}
+                  className={`rounded-full px-4 py-2 text-sm transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#4a86e8] ${
+                    category === c
+                      ? 'bg-[#1c2230] text-white'
+                      : 'bg-white text-[#4b5365] border border-[#e0e3ea] hover:border-[#1c2230]'
+                  }`}
+                >
+                  {c}
+                </button>
+              ))}
             </div>
           </div>
-        </div>
-      </section>
 
-      {/* Contact Section */}
-      <section id="contact" className="py-20 bg-gradient-to-r from-pink-500 to-blue-400 text-white">
-        <div className="container mx-auto px-6 text-center">
-          <h2 className="text-4xl font-bold mb-6">お問い合わせ</h2>
-          <p className="text-xl mb-8 max-w-2xl mx-auto">
-            ご質問やご相談がございましたら、お気軽にお問い合わせください。
+          <ul className="mt-12 grid grid-cols-2 gap-x-5 gap-y-10 md:grid-cols-3 lg:grid-cols-4">
+            {visible.map((p) => (
+              <li key={p.name}>
+                <div className="relative overflow-hidden bg-white">
+                  <ImageWithFallback src={p.image} alt={p.name} className="w-full aspect-square object-cover" />
+                  {p.tag && (
+                    <span className="absolute left-3 top-3 bg-white px-2.5 py-1 text-xs text-[#d8587f]">{p.tag}</span>
+                  )}
+                </div>
+                <p className="mt-4 text-sm leading-6 text-[#1c2230]">{p.name}</p>
+                <p className="mt-1 text-sm text-[#5d6577]">{p.price}</p>
+              </li>
+            ))}
+          </ul>
+
+          <p className="mt-14 text-sm text-[#5d6577]">
+            ご購入やご相談は、
+            <Link to="/#contact" className="text-[#1c2230] underline underline-offset-4 hover:text-[#4a86e8]">
+              お問い合わせ
+            </Link>
+            からお気軽にどうぞ。
           </p>
-          <button className="bg-white text-pink-500 px-8 py-4 rounded-full text-lg font-semibold hover:shadow-xl transition">
-            お問い合わせフォームへ
-          </button>
+        </div>
+      </section>
+
+      {/* Services */}
+      <section id="services" className="scroll-mt-20 bg-white py-20 md:py-28">
+        <div className="mx-auto max-w-6xl px-6">
+          <h2 className="text-3xl md:text-4xl font-medium" style={serif}>
+            3つの要素で、新しい価値を。
+          </h2>
+          <div className="mt-14 grid gap-10 md:grid-cols-3 md:gap-12">
+            {services.map((s) => (
+              <div key={s.title} className="border-t border-[#1c2230] pt-6">
+                <h3 className="text-xl font-medium" style={serif}>
+                  {s.title}
+                </h3>
+                <p className="mt-4 max-w-xs text-[15px] leading-8 text-[#4b5365]">{s.body}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Features */}
+      <section id="features" className="scroll-mt-20 bg-[#f6f7f9] py-20 md:py-28">
+        <div className="mx-auto max-w-6xl px-6 grid gap-12 md:grid-cols-12 md:items-center">
+          <div className="md:col-span-6">
+            <ImageWithFallback
+              src="https://images.unsplash.com/photo-1664455340023-214c33a9d0bd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080"
+              alt="クリエイティブなショッピング体験"
+              className="w-full aspect-[4/3] object-cover"
+            />
+          </div>
+          <div className="md:col-span-5 md:col-start-8">
+            <h2 className="text-3xl md:text-4xl font-medium" style={serif}>
+              毎日、新しい発見がある。
+            </h2>
+            <p className="mt-6 text-[15px] leading-8 text-[#4b5365]">
+              単なるショッピングの場ではなく、ユニークな商品や斬新なアイデアとの出会いを届けるお店です。
+            </p>
+            <ul className="mt-8 divide-y divide-[#e0e3ea] border-y border-[#e0e3ea]">
+              {features.map((f) => (
+                <li key={f.title} className="py-5">
+                  <p className="font-medium">{f.title}</p>
+                  <p className="mt-1 text-sm leading-7 text-[#5d6577]">{f.body}</p>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      {/* About */}
+      <section id="about" className="scroll-mt-20 bg-white py-20 md:py-28">
+        <div className="mx-auto max-w-6xl px-6 grid gap-10 md:grid-cols-12">
+          <h2 className="md:col-span-4 text-3xl md:text-4xl font-medium" style={serif}>
+            会社概要
+          </h2>
+          <div className="md:col-span-7 space-y-6 text-[15px] leading-8 text-[#4b5365]">
+            <p>
+              YOICHI STOREは、「面白い」を追求し続けるお店です。アイデア、デザイン、ショッピングの3つを掛け合わせ、これまでにない価値を生み出しています。
+            </p>
+            <p>
+              お客様一人ひとりに寄り添い、日常に驚きと喜びを届けることが私たちの役目です。テクノロジーとクリエイティビティの力で、未来のショッピング体験をつくっていきます。
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Contact */}
+      <section id="contact" className="scroll-mt-20 bg-[#1c2230] text-white">
+        <div className="h-[3px] bg-gradient-to-r from-[#d8587f] to-[#4a86e8]" />
+        <div className="mx-auto max-w-6xl px-6 py-20 md:py-28 text-center">
+          <h2 className="text-3xl md:text-4xl font-medium" style={serif}>
+            お問い合わせ
+          </h2>
+          <p className="mx-auto mt-6 max-w-lg text-[15px] leading-8 text-white/75 [text-wrap:balance]">
+            ご質問やご相談は、SNSのメッセージからお気軽にご連絡ください。
+          </p>
+          <Link
+            to="/sns"
+            className="mt-10 inline-block rounded-full bg-white px-8 py-3.5 text-[#1c2230] hover:bg-[#eef0f4] transition-colors"
+          >
+            SNSから連絡する
+          </Link>
         </div>
       </section>
     </>
